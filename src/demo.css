@@ -1,4 +1,29 @@
 .point {
+	opacity: 0;
+	transition: opacity 1s linear;
+}
+
+.point:hover{
+	fill:#f00;
+}
+
+.point.selected {
+	stroke: #f00;
+	stroke-width: 2
+}
+
+.point.visible {
+	opacity: 0.7;
+}
+
+.pt {
 	fill:#94a6b2;
-	opacity: .5;
+}
+
+.ca {
+	fill:#94b296;
+}
+
+.cma {
+	fill:#b29c94;
 }

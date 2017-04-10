@@ -13,12 +13,13 @@ var scatterDefault = {
     y: {
       ticks: 10
     },
-    pointRadius: 5
-  },
-  outerWidth = 600;
+    pointRadius: 5,
+    width: 600,
+  };
 
 this.scatterChart = function(svg, settings) {
   var mergedSettings = $.extend({}, scatterDefault, settings),
+    outerWidth = mergedSettings.width,
     outerHeight = Math.ceil(outerWidth / mergedSettings.aspectRatio),
     innerHeight = outerHeight - mergedSettings.margin.top - mergedSettings.margin.bottom,
     innerWidth = outerWidth - mergedSettings.margin.left - mergedSettings.margin.right,
@@ -29,39 +30,32 @@ this.scatterChart = function(svg, settings) {
     chartInner = chart.select("g"),
     transition = d3.transition()
       .duration(1000),
-    filterOutliars = function(data) {
+    getOutliarBounds = function(data) {
       var numericalSort = function (a, b) {
           return a - b;
         },
-        x, y, x5, y5, xMin, xMax, yMin, yMax;
+        xArray, yArray, p5, xMin, xMax, yMin, yMax;
 
-      x = data.map(function(d) {
+      xArray = data.map(function(d) {
         return mergedSettings.x.getValue(d);
       }).sort(numericalSort);
 
-      y = data.map(function(d) {
+      yArray = data.map(function(d) {
         return mergedSettings.y.getValue(d);
       }).sort(numericalSort);
 
-      x5 = Math.floor(x.length * .05);
-      y5 = Math.floor(y.length * .05);
+      p5 = Math.floor(data.length * .05);
 
-      xMin = x[x5];
-      xMax = x[x.length - x5];
-
-      yMin = y[y5];
-      yMax = y[y.length - y5];
-
-      return data.filter(function(d) {
-        var xD = mergedSettings.x.getValue(d),
-          yD = mergedSettings.y.getValue(d);
-
-        if (xD >= xMin && xD <= xMax && yD >= yMin && yD <= yMax) {
-          return true;
+      return {
+        x: {
+          min: xArray[p5],
+          max: xArray[xArray.length - p5]
+        },
+        y: {
+          min: yArray[p5],
+          max: yArray[yArray.length - p5]
         }
-
-        return false;
-      });
+      };
     },
     draw = function() {
       var sett = this.settings,
@@ -70,32 +64,50 @@ this.scatterChart = function(svg, settings) {
         xAxisObj = chartInner.select(".x.axis"),
         yAxisObj = chartInner.select(".y.axis"),
         dataLayer = svg.select("#data"),
-        domainData;
+        padding = 1 + sett.pointRadius / innerHeight,
+        displayOnly = sett.displayOnly && typeof sett.displayOnly === "function" ?
+          sett.displayOnly(data) : null,
+        classFn = function(d,i){
+          var cl = "point point" + (i + 1);
 
-      domainData = settings.filterOutliar === true ? filterOutliars(data) : data;
+          if (sett.z && sett.z.getValue && typeof sett.z.getValue === "function") {
+            cl += " " + sett.z.getValue(d)
+          }
 
-      x.domain(d3.extent(domainData, sett.x.getValue));
+          if (!displayOnly || displayOnly.indexOf(d) !== -1) {
+            cl += " visible"
+          }
 
-      y.domain([
-        0,
-        d3.max(domainData, settings.y.getValue) * (1 + mergedSettings.pointRadius / innerHeight)
-      ]);
+          return cl;
+        },
+        xFn = function(d) {return x(sett.x.getValue(d))},
+        yFn = function(d) {return y(sett.y.getValue(d))},
+        xDomain, yDomain, bounds;
 
-      chartInner
-        .attr("transform", "translate(" + sett.margin.left + "," + sett.margin.top + ")");
+      if (sett.filterOutliars) {
+         bounds = getOutliarBounds(data);
+
+         xDomain = [bounds.x.min, bounds.x.max];
+         yDomain = [bounds.y.min, bounds.y.max];
+      } else if (displayOnly) {
+        xDomain = d3.extent(displayOnly, sett.x.getValue);
+        yDomain = d3.extent(displayOnly, sett.y.getValue);
+      } else {
+        xDomain = d3.extent(data, sett.x.getValue);
+        yDomain = d3.extent(data, sett.y.getValue);
+      }
+
+      xDomain[0] -= padding;
+      yDomain[0] -= padding;
+      xDomain[1] += padding;
+      yDomain[1] += padding;
+
+      x.domain(xDomain);
+      y.domain(yDomain);
 
       if (dataLayer.empty()) {
-        dataLayer = svg
-          .append("symbol")
-            .attr("id", "data")
-            .attr("preserveAspectRatio", "xMinYMax slice");
-
-        chartInner.append("use")
-          .attr("x", 0)
-          .attr("y", 0)
-          .attr("height", innerHeight)
-          .attr("width", innerWidth)
-          .attr("href", "#data");
+        dataLayer = chartInner.append("g")
+          .attr("id", "data");
       }
 
       scatter = dataLayer.selectAll(".point")
@@ -104,15 +116,21 @@ this.scatterChart = function(svg, settings) {
       scatter
         .enter()
         .append("circle")
-          .attr("r", mergedSettings.pointRadius)
-          .attr("class", function(d,i){return "point point" + (i + 1);})
-          .attr("cx", function(d) {return x(settings.x.getValue(d))})
-          .attr("cy", function(d) {return y(settings.y.getValue(d))});
+          .attr("r", sett.pointRadius)
+          .attr("id", function(d) {if (sett.key && sett.key.get && typeof sett.key.get === "function"){return sett.key.get(d)}})
+          .attr("class", classFn)
+          .attr("cx", xFn)
+          .attr("cy", yFn);
 
       scatter
         .transition(transition)
-        .attr("cx", function(d) {return x(settings.x.getValue(d))})
-        .attr("cy", function(d) {return y(settings.y.getValue(d))});
+        .attr("class", classFn)
+        .attr("cx", xFn)
+        .attr("cy", yFn);
+
+      scatter
+        .exit()
+          .remove();
 
       if (xAxisObj.empty()) {
         xAxisObj = chartInner.append('g')
@@ -139,7 +157,8 @@ this.scatterChart = function(svg, settings) {
     .attr("preserveAspectRatio", "xMidYMid meet");
 
   if (chartInner.empty()) {
-    chartInner = chart.append("g");
+    chartInner = chart.append("g")
+      .attr("transform", "translate(" + mergedSettings.margin.left + "," + mergedSettings.margin.top + ")");
   }
 
   if (!mergedSettings.data) {
