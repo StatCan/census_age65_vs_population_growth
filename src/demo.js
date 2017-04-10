@@ -87,9 +87,19 @@ var lang = document.documentElement.lang,
 					idShort = id.substr(idPrefix.length);
 					list = list.concat(idShort);
 
+					setTimeout(function() {
+						chart.select("#" + id)
+							.classed("selected", true);
+					}, 500);
+
 					settings.filterData = function(data) {
-						var newData = defaultFilter(data);
-						newData.push(baseFilter(data)[data.index.indexOf(idShort)]);
+						var newData = defaultFilter(data),
+							point = baseFilter(data)[data.index.indexOf(idShort)];
+
+						if (newData.indexOf(point) === -1) {
+							newData.push(point);
+						}
+
 						return newData;
 					}
 				}
@@ -98,10 +108,6 @@ var lang = document.documentElement.lang,
 			settings.displayOnly = getDisplayPointFn(list);
 			scatterChart(chart, settings);
 
-			setTimeout(function() {
-				chart.select("#" + id)
-					.classed("selected", true);
-			}, 500);
 		}, uiTimeout;
 
 i18next.init({
