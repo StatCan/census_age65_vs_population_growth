@@ -70,8 +70,8 @@ this.scatterChart = function(svg, settings) {
         classFn = function(d,i){
           var cl = "point point" + (i + 1);
 
-          if (sett.z && sett.z.getValue && typeof sett.z.getValue === "function") {
-            cl += " " + sett.z.getValue(d)
+          if (sett.z && sett.z.getClass && typeof sett.z.getClass === "function") {
+            cl += " " + sett.z.getClass(d)
           }
 
           if (!displayOnly || displayOnly.indexOf(d) !== -1) {
@@ -79,6 +79,11 @@ this.scatterChart = function(svg, settings) {
           }
 
           return cl;
+        },
+        idFn = function(d) {
+            if (sett.z && sett.z.getId && typeof sett.z.getId === "function") {
+                return sett.z.getId(d)
+            }
         },
         xFn = function(d) {return x(sett.x.getValue(d))},
         yFn = function(d) {return y(sett.y.getValue(d))},
@@ -117,7 +122,7 @@ this.scatterChart = function(svg, settings) {
         .enter()
         .append("circle")
           .attr("r", sett.pointRadius)
-          .attr("id", function(d) {if (sett.key && sett.key.get && typeof sett.key.get === "function"){return sett.key.get(d)}})
+          .attr("id", idFn)
           .attr("class", classFn)
           .attr("cx", xFn)
           .attr("cy", yFn);

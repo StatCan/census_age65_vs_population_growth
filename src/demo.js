@@ -44,7 +44,7 @@ var lang = document.documentElement.lang,
 				}
 			},
 			z: {
-				getValue: function(d) {
+				getClass: function(d) {
 					if (provincesSGC.indexOf(d.id) !== -1) {
 						return "pt";
 					} else if (CAs.indexOf(d.id) !== -1) {
@@ -52,11 +52,12 @@ var lang = document.documentElement.lang,
 					} else if (CMAs.indexOf(d.id) !== -1) {
 						return "cma";
 					}
-				}
-			},
-			key: {
-				get: function(d){
+				},
+				getId: function(d){
 					return idPrefix + d.id;
+				},
+				getText: function(d) {
+					return i18next.t(this.getId(d), {ns: "sgc"});
 				}
 			},
 			width: 1200
@@ -131,15 +132,16 @@ settings.displayOnly = getDisplayPointFn(provincesSGC);
 
 d3.json('/data/65plus_over_pop_growth.json', function(error, data) {
 	var $list = $("#sgc_list"),
-		filteredData, f, id, label;
+		filteredData, f, dataPoint, id, label;
 
 	settings.data = data;
 	scatterChart(chart, settings);
 
 	filteredData = baseFilter(data);
 	for (f = 0; f < filteredData.length; f++) {
-		id = settings.key.get(filteredData[f]);
-		text = i18next.t(id, {ns: "sgc"});
+		dataPoint = filteredData[f];
+		id = settings.z.getId(dataPoint);
+		text = settings.z.getText(dataPoint);
 		$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
 	}
 });
@@ -161,7 +163,7 @@ $("#age65_dist_growth").on("mouseenter mouseleave", "circle.visible", function(e
 			.attr("class", "mouseover")
 			.attr("x", circle.cx.baseVal.value + 10)
 			.attr("y", circle.cy.baseVal.value - 10)
-			.text(i18next.t(circle.id, {ns: "sgc"}));
+			.text(settings.z.getText(circle.__data__));
 			break;
 	case "mouseleave":
 		d3.selectAll(".mouseover").remove();
