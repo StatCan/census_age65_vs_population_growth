@@ -154,7 +154,7 @@ i18next.init({
 
 settings.displayOnly = getDisplayPointFn(provincesSGC);
 
-d3.json('/data/65plus_over_pop_growth.json', function(error, data) {
+d3.json('data/65plus_over_pop_growth.json', function(error, data) {
 	var $list = $("#sgc_list"),
 		filteredData, f, dataPoint, id, label;
 
