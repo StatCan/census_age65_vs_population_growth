@@ -1,4 +1,6 @@
 var lang = document.documentElement.lang,
+	sgcI18nRoot = "lib/statcan_sgc/i18n/",
+	rootI18nRoot = "src/i18n/",
 	idPrefix = "sgc_",
 	chart = d3.select(".scatter .data")
 		.append("svg")
@@ -22,8 +24,13 @@ var lang = document.documentElement.lang,
 			}
 			return data.distribution
 		},
-		defaultFilter = function(data) {
-			return baseFilter(data).slice(0,193);
+		defaultFilter = function(data, mode) {
+			var newData = baseFilter(data);
+
+			if (mode === "chart") {
+				return newData.slice(0,193);
+			}
+			return newData;
 		},
 		settings = {
 			filterData: defaultFilter,
@@ -43,23 +50,27 @@ var lang = document.documentElement.lang,
 					return d.pc_over_65;
 				}
 			},
-			z: {
-				getClass: function(d) {
-					if (provincesSGC.indexOf(d.id) !== -1) {
-						return "pt";
-					} else if (CAs.indexOf(d.id) !== -1) {
-						return "ca";
-					} else if (CMAs.indexOf(d.id) !== -1) {
-						return "cma";
+			z: function() {
+				var _this = {
+					getClass: function(d) {
+						if (provincesSGC.indexOf(d.id) !== -1) {
+							return "pt";
+						} else if (CAs.indexOf(d.id) !== -1) {
+							return "ca";
+						} else if (CMAs.indexOf(d.id) !== -1) {
+							return "cma";
+						}
+					},
+					getId: function(d){
+						return idPrefix + d.id;
+					},
+					getText: function(d) {
+						return i18next.t(_this.getId(d), {ns: "sgc"});
 					}
-				},
-				getId: function(d){
-					return idPrefix + d.id;
-				},
-				getText: function(d) {
-					return i18next.t(this.getId(d), {ns: "sgc"});
-				}
-			},
+				};
+
+				return _this;
+			}(),
 			width: 1200
 		},
 		getDisplayPointFn = function(sgcs){
@@ -123,10 +134,23 @@ i18next.init({
 });
 
 //Load the i18n
-$.getJSON("lib/statcan_sgc/i18n/" + lang + ".json", function(data) {
-	var ns = Object.keys(data[lang])[0];
-	i18next.addResourceBundle(lang, ns, data[lang][ns]);
-});
+(function(roots) {
+	var i18nCallback = function(data) {
+			var ns = Object.keys(data[lang])[0];
+			i18next.addResourceBundle(lang, ns, data[lang][ns]);
+		}, promises = [],
+		r;
+	for(r = 0; r < roots.length; r++) {
+		promises.push($.getJSON(roots[r] + lang + ".json", i18nCallback));
+	}
+
+	$.when.apply(this, promises).then(function() {
+		settings.x.label = i18next.t("x_label", {ns: "age65_popgrowth"});
+		settings.y.label = i18next.t("y_label", {ns: "age65_popgrowth"});
+		settings.z.label = i18next.t("z_label", {ns: "age65_popgrowth"});
+		settings.altText = i18next.t("alt", {ns: "age65_popgrowth"});
+	});
+})([sgcI18nRoot, rootI18nRoot])
 
 settings.displayOnly = getDisplayPointFn(provincesSGC);
 

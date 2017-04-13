@@ -60,7 +60,7 @@ this.scatterChart = function(svg, settings) {
     draw = function() {
       var sett = this.settings,
         data = (sett.filterData && typeof sett.filterData === "function") ?
-          sett.filterData(sett.data) : sett.data,
+          sett.filterData(sett.data, "chart") : sett.data,
         xAxisObj = chartInner.select(".x.axis"),
         yAxisObj = chartInner.select(".y.axis"),
         dataLayer = svg.select("#data"),
@@ -150,16 +150,61 @@ this.scatterChart = function(svg, settings) {
       }
       yAxisObj.call(yAxis);
     },
+    drawTable = function() {
+      var sett = this.settings,
+        data = (sett.filterData && typeof sett.filterData === "function") ?
+          sett.filterData(sett.data, "table") : sett.data,
+        details = chart.select(function(){return this.parentNode;})
+          .append("details"),
+        table = details
+          .append("table")
+            .attr("class", "table"),
+        header = table.append("thead").append("tr"),
+        body = table.append("tbody"),
+        dataRows, dataRow;
+
+      // TODO: Add i18n
+      details.append("summary")
+        .text("Data");
+
+      header.append("th")
+        .text(settings.z.label);
+      header.append("th")
+        .text(settings.x.label);
+      header.append("th")
+        .text(settings.y.label);
+
+      dataRows = body.selectAll("tr")
+        .data(data);
+
+      dataRow = dataRows
+        .enter()
+          .append("tr");
+
+      dataRow
+        .append("th")
+          .text(settings.z.getText);
+
+      dataRow
+        .append("td")
+          .text(settings.x.getValue);
+
+      dataRow
+        .append("td")
+          .text(settings.y.getValue);
+    },
     rtnObj;
 
-	rtnObj = {
-		settings: mergedSettings,
-		svg: svg
-	};
+  rtnObj = {
+    settings: mergedSettings,
+    svg: svg
+  };
 
   svg
     .attr("viewBox", "0 0 " + outerWidth + " " + outerHeight)
-    .attr("preserveAspectRatio", "xMidYMid meet");
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .attr("role", "img")
+    .attr("aria-label", mergedSettings.altText);
 
   if (chartInner.empty()) {
     chartInner = chart.append("g")
@@ -170,9 +215,11 @@ this.scatterChart = function(svg, settings) {
     d3.json(mergedSettings.url, function(error, data) {
       mergedSettings.data = data;
       draw.apply(rtnObj);
+      drawTable.apply(rtnObj);
     });
   } else {
     draw.apply(rtnObj);
+    drawTable.apply(rtnObj);
   }
 
   return rtnObj;

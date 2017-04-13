@@ -1,0 +1,10 @@
+{
+	"en": {
+		"age65_popgrowth": {
+			"alt": "Census 2011: Age 65+ distribution vs population growth (Data follows)",
+			"x_label": "Population Growth",
+			"y_label": "Age 65+",
+      "z_label": "Location"
+		}
+	}
+}
