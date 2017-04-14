@@ -149,26 +149,26 @@ i18next.init({
 		settings.y.label = i18next.t("y_label", {ns: "age65_popgrowth"});
 		settings.z.label = i18next.t("z_label", {ns: "age65_popgrowth"});
 		settings.altText = i18next.t("alt", {ns: "age65_popgrowth"});
+
+		settings.displayOnly = getDisplayPointFn(provincesSGC);
+
+		d3.json('data/65plus_over_pop_growth.json', function(error, data) {
+			var $list = $("#sgc_list"),
+				filteredData, f, dataPoint, id, label;
+
+			settings.data = data;
+			scatterChart(chart, settings);
+
+			filteredData = baseFilter(data);
+			for (f = 0; f < filteredData.length; f++) {
+				dataPoint = filteredData[f];
+				id = settings.z.getId(dataPoint);
+				text = settings.z.getText(dataPoint);
+				$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
+			}
+		});
 	});
 })([sgcI18nRoot, rootI18nRoot])
-
-settings.displayOnly = getDisplayPointFn(provincesSGC);
-
-d3.json('data/65plus_over_pop_growth.json', function(error, data) {
-	var $list = $("#sgc_list"),
-		filteredData, f, dataPoint, id, label;
-
-	settings.data = data;
-	scatterChart(chart, settings);
-
-	filteredData = baseFilter(data);
-	for (f = 0; f < filteredData.length; f++) {
-		dataPoint = filteredData[f];
-		id = settings.z.getId(dataPoint);
-		text = settings.z.getText(dataPoint);
-		$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
-	}
-});
 
 $(document).on("change", uiHandler);
 $(document).on("input", function() {
