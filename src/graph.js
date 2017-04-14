@@ -142,13 +142,28 @@ this.scatterChart = function(svg, settings) {
         .attr('class', 'x axis')
         .attr("transform", "translate(0," + innerHeight + ")")
       }
-      xAxisObj.call(xAxis);
+      xAxisObj.call(xAxis)
+        .append("text")
+          .attr("class", "chart-label")
+          .attr("fill", "#000")
+          .attr("x", innerWidth)
+          .attr("dy", "-0.5em")
+          .attr("text-anchor", "end")
+          .text(settings.x.label);
 
       if (yAxisObj.empty()) {
         yAxisObj = chartInner.append('g')
           .attr('class', 'y axis')
       }
-      yAxisObj.call(yAxis);
+      yAxisObj.call(yAxis)
+        .append("text")
+          .attr("class", "chart-label")
+          .attr("fill", "#000")
+          .attr("y", "0")
+          .attr("transform", "rotate(-90)")
+          .attr("dy", "1.5em")
+          .attr("text-anchor", "end")
+          .text(settings.y.label);
     },
     drawTable = function() {
       var sett = this.settings,

@@ -71,7 +71,7 @@ var lang = document.documentElement.lang,
 
 				return _this;
 			}(),
-			width: 1200
+			width: 900
 		},
 		getDisplayPointFn = function(sgcs){
 			return function(data) {
