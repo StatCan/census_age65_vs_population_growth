@@ -29,7 +29,8 @@ this.scatterChart = function(svg, settings) {
     yAxis = d3.axisLeft(y).ticks(mergedSettings.y.ticks),
     chartInner = chart.select("g"),
     transition = d3.transition()
-      .duration(1000),
+      .duration(1000)
+      .ease(d3.easeLinear),
     getOutliarBounds = function(data) {
       var numericalSort = function (a, b) {
           return a - b;
