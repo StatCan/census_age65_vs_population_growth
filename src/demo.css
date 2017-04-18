@@ -1,9 +1,12 @@
 .point {
 	opacity: 0.7;
+}
+
+.point, .label {
 	transition: opacity 1s linear;
 }
 
-.point:not(.visible) {
+.point:not(.visible), .label:not(.visible) {
 	opacity: 0;
 	pointer-events: none;
 }

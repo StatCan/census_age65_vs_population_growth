@@ -13,6 +13,7 @@ var scatterDefault = {
     y: {
       ticks: 10
     },
+    showLabels: false,
     pointRadius: 5,
     width: 600,
   };
@@ -81,6 +82,15 @@ this.scatterChart = function(svg, settings) {
 
           return cl;
         },
+        labelClassFn = function(d, i) {
+          var cl = "label label" + (i + 1);
+
+          if (!displayOnly || displayOnly.indexOf(d) !== -1) {
+            cl += " visible"
+          }
+
+          return cl;
+        },
         idFn = function(d) {
             if (sett.z && sett.z.getId && typeof sett.z.getId === "function") {
                 return sett.z.getId(d)
@@ -137,6 +147,33 @@ this.scatterChart = function(svg, settings) {
       scatter
         .exit()
           .remove();
+
+
+      if (sett.showLabels) {
+        scatterLabel = dataLayer.selectAll(".label")
+          .data(data)
+
+        scatterLabel
+          .enter()
+          .append("text")
+            .attr("class", labelClassFn)
+            .attr("fill", "#000")
+            .attr("x", xFn)
+            .attr("y", yFn)
+            .attr("dx", "0.5em")
+            .attr("dy", "-0.3em")
+            .text(sett.z.getText);
+
+        scatterLabel
+          .transition(transition)
+          .attr("class", labelClassFn)
+          .attr("x", xFn)
+          .attr("y", yFn);
+
+        scatterLabel
+          .exit()
+            .remove();
+      }
 
       if (xAxisObj.empty()) {
         xAxisObj = chartInner.append('g')
