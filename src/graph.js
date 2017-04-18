@@ -169,44 +169,51 @@ this.scatterChart = function(svg, settings) {
       var sett = this.settings,
         data = (sett.filterData && typeof sett.filterData === "function") ?
           sett.filterData(sett.data, "table") : sett.data,
-        details = chart.select(function(){return this.parentNode;})
-          .append("details"),
+        parent = chart.select(function(){return this.parentNode;}),
+        details = parent
+          .select("details"),
+        table, header, body, dataRows, dataRow;
+
+      if (details.empty()) {
+        details = parent
+          .append("details");
         table = details
           .append("table")
-            .attr("class", "table"),
-        header = table.append("thead").append("tr"),
-        body = table.append("tbody"),
-        dataRows, dataRow;
+            .attr("class", "table");
+        header = table.append("thead").append("tr");
+        body = table.append("tbody");
 
-      // TODO: Add i18n
-      details.append("summary")
-        .text("Data");
+        // TODO: Add i18n
+        details.append("summary")
+          .text("Data");
 
-      header.append("th")
-        .text(settings.z.label);
-      header.append("th")
-        .text(settings.x.label);
-      header.append("th")
-        .text(settings.y.label);
+        header.append("th")
+          .text(settings.z.label);
+        header.append("th")
+          .text(settings.x.label);
+        header.append("th")
+          .text(settings.y.label);
 
-      dataRows = body.selectAll("tr")
-        .data(data);
 
-      dataRow = dataRows
-        .enter()
-          .append("tr");
+        dataRows = body.selectAll("tr")
+          .data(data);
 
-      dataRow
-        .append("th")
-          .text(settings.z.getText);
+        dataRow = dataRows
+          .enter()
+            .append("tr");
 
-      dataRow
-        .append("td")
-          .text(settings.x.getValue);
+        dataRow
+          .append("th")
+            .text(settings.z.getText);
 
-      dataRow
-        .append("td")
-          .text(settings.y.getValue);
+        dataRow
+          .append("td")
+            .text(settings.x.getValue);
+
+        dataRow
+          .append("td")
+            .text(settings.y.getValue);
+      }
     },
     rtnObj;
 
