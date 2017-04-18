@@ -27,3 +27,11 @@
 .cma {
 	fill:#b29c94;
 }
+
+@media screen and (min-width:0\0) and (min-resolution: +72dpi) {
+  /* IE9+ CSS */
+  svg{
+		width: 100%;
+		height: 600px;
+	}
+}
