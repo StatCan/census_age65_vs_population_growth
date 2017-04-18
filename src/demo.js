@@ -38,7 +38,7 @@ var lang = document.documentElement.lang,
 				top: 10,
 	      right: 10,
 	      bottom: 30,
-	      left: 22
+	      left: 27
 			},
 			x: {
 				getValue: function(d) {
