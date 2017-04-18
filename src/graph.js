@@ -176,16 +176,18 @@ this.scatterChart = function(svg, settings) {
 
       if (details.empty()) {
         details = parent
-          .append("details");
+          .append("details")
+            .attr("class", "chart-data-table");
+
+        // TODO: Add i18n
+        details.append("summary")
+          .text("Data");
+
         table = details
           .append("table")
             .attr("class", "table");
         header = table.append("thead").append("tr");
         body = table.append("tbody");
-
-        // TODO: Add i18n
-        details.append("summary")
-          .text("Data");
 
         header.append("th")
           .text(settings.z.label);
@@ -193,7 +195,6 @@ this.scatterChart = function(svg, settings) {
           .text(settings.x.label);
         header.append("th")
           .text(settings.y.label);
-
 
         dataRows = body.selectAll("tr")
           .data(data);
@@ -213,6 +214,10 @@ this.scatterChart = function(svg, settings) {
         dataRow
           .append("td")
             .text(settings.y.getValue);
+
+        if ($) {
+          $(".chart-data-table summary").trigger("wb-init.wb-details");
+        }
       }
     },
     rtnObj;
