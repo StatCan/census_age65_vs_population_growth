@@ -156,7 +156,7 @@ i18next.init({
 
 		d3.json('data/65plus_over_pop_growth.json', function(error, data) {
 			var $list = $("#sgc_list"),
-				filteredData, f, dataPoint, id, label;
+				filteredData, f, dataPoint, id, shortId, label;
 
 			settings.data = data;
 			scatterChart(chart, settings);
@@ -165,7 +165,11 @@ i18next.init({
 			for (f = 0; f < filteredData.length; f++) {
 				dataPoint = filteredData[f];
 				id = settings.z.getId(dataPoint);
-				text = settings.z.getText(dataPoint);
+				shortId = id.replace(idPrefix, "");
+				text = settings.z.getText(dataPoint)
+				if (shortId.length > 2) {
+					text  += ", " + sgc.getProvinceCodeFromSGC(sgc.getSGCProvince(shortId));
+				}
 				$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
 			}
 		});
