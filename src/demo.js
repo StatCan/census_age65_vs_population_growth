@@ -114,7 +114,7 @@ var lang = document.documentElement.lang,
 					}, 500);
 
 					settings.filterData = function(data) {
-						var newData = defaultFilter(data),
+						var newData = defaultFilter(data, "chart"),
 							point = baseFilter(data)[data.index.indexOf(idShort)];
 
 						if (newData.indexOf(point) === -1) {
