@@ -60,6 +60,8 @@ var lang = document.documentElement.lang,
 						} else if (CAs.indexOf(d.id) !== -1) {
 							return "ca";
 						}
+
+						return "";
 					},
 					getId: function(d){
 						return idPrefix + d.id;
