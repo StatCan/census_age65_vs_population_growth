@@ -19,7 +19,7 @@ var lang = document.documentElement.lang,
 		baseFilter = function(data) {
 			if (!data.index) {
 				data.index = data.distribution.map(function(d) {
-					return d.id;
+					return d.sgc;
 				});
 			}
 			return data.distribution
@@ -53,18 +53,22 @@ var lang = document.documentElement.lang,
 			z: function() {
 				var _this = {
 					getClass: function(d) {
-						if (provincesSGC.indexOf(d.id) !== -1) {
+						var id = _this.getSGCId(d);
+						if (provincesSGC.indexOf(id) !== -1) {
 							return "pt";
-						} else if (CMAs.indexOf(d.id) !== -1) {
+						} else if (CMAs.indexOf(id) !== -1) {
 							return "cma";
-						} else if (CAs.indexOf(d.id) !== -1) {
+						} else if (CAs.indexOf(id) !== -1) {
 							return "ca";
 						}
 
 						return "";
 					},
 					getId: function(d){
-						return idPrefix + d.id;
+						return idPrefix + d.sgcId;
+					},
+					getSGCId: function(d) {
+					  return d.sgcId;
 					},
 					getText: function(d) {
 						return i18next.t(_this.getId(d), {ns: "sgc"});
@@ -78,7 +82,7 @@ var lang = document.documentElement.lang,
 		getDisplayPointFn = function(sgcs){
 			return function(data) {
 				return data.filter(function(d) {
-					if (sgcs.indexOf(d.id) !== -1) {
+					if (sgcs.indexOf(settings.z.getSGCId(d)) !== -1) {
 						return true;
 					}
 
@@ -165,10 +169,10 @@ i18next.init({
 			for (f = 0; f < filteredData.length; f++) {
 				dataPoint = filteredData[f];
 				id = settings.z.getId(dataPoint);
-				shortId = id.replace(idPrefix, "");
+				sgcId = settings.z.getSGCId(dataPoint)
 				text = settings.z.getText(dataPoint)
-				if (shortId.length > 2) {
-					text  += ", " + sgc.getProvinceCodeFromSGC(sgc.getSGCProvince(shortId));
+				if (sgcId.length > 2) {
+					text  += ", " + sgc.getProvinceCodeFromSGC(sgc.getSGCProvince(sgcId));
 				}
 				$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
 			}
