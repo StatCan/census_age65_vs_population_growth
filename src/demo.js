@@ -1,6 +1,8 @@
 var lang = document.documentElement.lang,
 	sgcI18nRoot = "lib/statcan_sgc/i18n/",
 	rootI18nRoot = "src/i18n/",
+	dataUrl = "data/65plus_over_pop_growth.json",
+	sgcUrl = "lib/statcan_sgc/sgc.json",
 	idPrefix = "sgc_",
 	chart = d3.select(".scatter .data")
 		.append("svg")
@@ -17,11 +19,6 @@ var lang = document.documentElement.lang,
 		CAs = CA.atl.concat(CA.QC, CA.ON, CA.pra, CA.BC, CA.terr),
 		CMAs = ["001","205","305","310","408","421","433","442","462","505","521","522","529","532","535","537","539","541","543","550","555","559","568","580","595","602","705","725","810","825","835","915","932","933","935"],
 		baseFilter = function(data) {
-			if (!data.index) {
-				data.index = data.distribution.map(function(d) {
-					return d.sgc;
-				});
-			}
 			return data.distribution
 		},
 		defaultFilter = function(data, mode) {
@@ -78,6 +75,25 @@ var lang = document.documentElement.lang,
 				return _this;
 			}(),
 			width: 900
+		},
+		mergeData = function(data, sgcs) {
+			var filteredData = baseFilter(data),
+				s, sgc, id, index;
+
+			data.index = filteredData.map(function(d) {
+				return settings.z.getSGCId(d);
+			});
+
+			for (s = 0; s < sgcs.sgcs.length; s ++) {
+				sgc = sgcs.sgcs[s]
+				id = settings.z.getSGCId(sgc);
+
+				if (data.index.indexOf(id) !== -1) {
+					index = data.index.indexOf(id);
+					$.extend(filteredData[index], sgc);
+				}
+			}
+			return data;
 		},
 		getDisplayPointFn = function(sgcs){
 			return function(data) {
@@ -158,25 +174,28 @@ i18next.init({
 
 		settings.displayOnly = getDisplayPointFn(provincesSGC);
 
-		d3.json('data/65plus_over_pop_growth.json', function(error, data) {
-			var $list = $("#sgc_list"),
-				filteredData, f, dataPoint, id, shortId, label;
+		d3.queue()
+			.defer(d3.json, dataUrl)
+			.defer(d3.json, sgcUrl)
+				.await(function(error, data, sgcs) {
+				var $list = $("#sgc_list"),
+					filteredData, f, dataPoint, id, shortId, label;
 
-			settings.data = data;
-			scatterChart(chart, settings);
+				settings.data = mergeData(data, sgcs);
+				scatterChart(chart, settings);
 
-			filteredData = baseFilter(data);
-			for (f = 0; f < filteredData.length; f++) {
-				dataPoint = filteredData[f];
-				id = settings.z.getId(dataPoint);
-				sgcId = settings.z.getSGCId(dataPoint)
-				text = settings.z.getText(dataPoint)
-				if (sgcId.length > 2) {
-					text  += ", " + sgc.getProvinceCodeFromSGC(sgc.getSGCProvince(sgcId));
+				filteredData = baseFilter(data);
+				for (f = 0; f < filteredData.length; f++) {
+					dataPoint = filteredData[f];
+					id = settings.z.getId(dataPoint);
+					sgcId = settings.z.getSGCId(dataPoint);
+					text = settings.z.getText(dataPoint);
+					if (sgcId.length > 2) {
+						text  += ", " + i18next.t(dataPoint.type, {ns: "sgc_type"}) + ", " + sgc.getProvinceCodeFromSGC(sgc.getSGCProvince(sgcId));
+					}
+					$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
 				}
-				$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
-			}
-		});
+			});
 	});
 })([sgcI18nRoot, rootI18nRoot])
 
