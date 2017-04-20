@@ -208,15 +208,29 @@ $(document).on("input", function() {
 });
 
 $("#age65_dist_growth").on("mouseenter mouseleave", "circle.visible", function(e) {
-	var circle;
+	var circle, text, x;
 	switch(e.type) {
 	case "mouseenter":
 		circle = e.target;
-		chart.select("#data").append("text")
+		x = circle.cx.baseVal.value + 10
+		text = chart.select("#data").append("text")
 			.attr("class", "mouseover")
-			.attr("x", circle.cx.baseVal.value + 10)
-			.attr("y", circle.cy.baseVal.value - 10)
+			.attr("x", x)
+			.attr("y", circle.cy.baseVal.value - 10);
+
+		text.append("tspan")
+			.attr("class", "sgc_name")
 			.text(settings.z.getText(circle.__data__));
+
+		text.append("tspan")
+			.attr("x", x)
+			.attr("dy", "1.5em")
+			.text(settings.x.label + ": " + settings.x.getValue(circle.__data__));
+
+		text.append("tspan")
+			.attr("x", x)
+			.attr("dy", "1.5em")
+			.text(settings.y.label + ": " + settings.y.getValue(circle.__data__));
 			break;
 	case "mouseleave":
 		d3.selectAll(".mouseover").remove();
