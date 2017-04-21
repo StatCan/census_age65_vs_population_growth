@@ -171,6 +171,7 @@ i18next.init({
 		settings.y.label = i18next.t("y_label", {ns: "age65_popgrowth"});
 		settings.z.label = i18next.t("z_label", {ns: "age65_popgrowth"});
 		settings.altText = i18next.t("alt", {ns: "age65_popgrowth"});
+		settings.datatableTitle = i18next.t("datatableTitle", {ns: "age65_popgrowth"});
 
 		settings.displayOnly = getDisplayPointFn(provincesSGC);
 

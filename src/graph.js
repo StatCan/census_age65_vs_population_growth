@@ -182,7 +182,7 @@ this.scatterChart = function(svg, settings) {
 
         // TODO: Add i18n
         details.append("summary")
-          .text("Data");
+          .text(settings.datatableTitle);
 
         table = details
           .append("table")

@@ -4,7 +4,8 @@
 			"alt": "Population âgée de 65 ans et plus (%) et la variation en pourcentage de population (2011 à 2016), Recensement de 2016",
 			"x_label": "Variation en pourcentage de population (2011 à 2016)",
 			"y_label": "Population âgée de 65 ans et plus (%)",
-      "z_label": "Géographie"
+			"z_label": "Géographie",
+			"datatableTitle": "Données"
 		}
 	}
 }
