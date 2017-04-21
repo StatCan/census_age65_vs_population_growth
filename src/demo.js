@@ -158,8 +158,12 @@ i18next.init({
 //Load the i18n
 (function(roots) {
 	var i18nCallback = function(data) {
-			var ns = Object.keys(data[lang])[0];
-			i18next.addResourceBundle(lang, ns, data[lang][ns]);
+			var namespaces = Object.keys(data[lang]),
+				n, ns;
+			for (n = 0; n < namespaces.length; n++) {
+				ns = namespaces[n];
+				i18next.addResourceBundle(lang, ns, data[lang][ns]);
+			}
 		}, promises = [],
 		r;
 	for(r = 0; r < roots.length; r++) {
