@@ -209,30 +209,45 @@ $(document).on("input", function() {
 });
 
 $("#age65_dist_growth").on("mouseenter mouseleave", "circle.visible", function(e) {
-	var circle, text, x;
+	var circle, text, textGroup, bbox, circleX, circleY, x, y;
 	switch(e.type) {
 	case "mouseenter":
 		circle = e.target;
-		x = circle.cx.baseVal.value + 10
-		text = chart.select("#data").append("text")
-			.attr("class", "mouseover")
-			.attr("x", x)
-			.attr("y", circle.cy.baseVal.value - 10);
+
+		textGroup = chart.select("#data").append("g")
+			.attr("class", "mouseover");
+
+		text = textGroup.append("text")
 
 		text.append("tspan")
 			.attr("class", "sgc_name")
 			.text(settings.z.getText(circle.__data__));
 
 		text.append("tspan")
-			.attr("x", x)
+			.attr("x", 0)
 			.attr("dy", "1.5em")
 			.text(settings.x.label + ": " + settings.x.getValue(circle.__data__));
 
 		text.append("tspan")
-			.attr("x", x)
+			.attr("x", 0)
 			.attr("dy", "1.5em")
 			.text(settings.y.label + ": " + settings.y.getValue(circle.__data__));
-			break;
+
+
+		// Position hover box
+		bbox = textGroup.node().getBBox();
+		circleX = circle.cx.baseVal.value;
+		circleY = circle.cy.baseVal.value;
+
+		x = circleX + 10;
+		y = circleY - 10;
+
+		if (bbox.width + x > settings.width - settings.margin.left - settings.margin.right) {
+			x -= bbox.width + 20;
+		}
+
+		textGroup.attr("transform", "translate(" + x + ", " + y + ")");
+		break;
 	case "mouseleave":
 		d3.selectAll(".mouseover").remove();
 	}
