@@ -170,7 +170,7 @@ i18next.init({
 		promises.push($.getJSON(roots[r] + lang + ".json", i18nCallback));
 	}
 
-	$.when.apply(this, promises).then(function() {
+	$.when.apply(this, promises).done(function() {
 		settings.x.label = i18next.t("x_label", {ns: "age65_popgrowth"});
 		settings.y.label = i18next.t("y_label", {ns: "age65_popgrowth"});
 		settings.z.label = i18next.t("z_label", {ns: "age65_popgrowth"});
