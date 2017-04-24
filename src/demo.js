@@ -68,7 +68,12 @@ var lang = document.documentElement.lang,
 					  return d.sgcId;
 					},
 					getText: function(d) {
-						return i18next.t(_this.getId(d), {ns: "sgc"});
+						var sgcId = _this.getSGCId(d),
+							text = i18next.t(_this.getId(d), {ns: "sgc"});
+						if (sgcId.length > 2) {
+							text  += ", " + i18next.t(d.type, {ns: "sgc_type"}) + ", " + sgc.getProvinceCodeFromSGC(sgc.getSGCProvince(sgcId));
+						}
+						return text;
 					}
 				};
 
@@ -195,9 +200,6 @@ i18next.init({
 					id = settings.z.getId(dataPoint);
 					sgcId = settings.z.getSGCId(dataPoint);
 					text = settings.z.getText(dataPoint);
-					if (sgcId.length > 2) {
-						text  += ", " + i18next.t(dataPoint.type, {ns: "sgc_type"}) + ", " + sgc.getProvinceCodeFromSGC(sgc.getSGCProvince(sgcId));
-					}
 					$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
 				}
 			});
