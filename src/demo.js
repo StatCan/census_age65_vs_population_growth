@@ -154,7 +154,7 @@ var lang = document.documentElement.lang,
 			settings.displayOnly = getDisplayPointFn(list);
 			scatterChart(chart, settings);
 
-		}, uiTimeout;
+		}, uiTimeout, scatterObj;
 
 i18next.init({
 	lng: lang
@@ -192,7 +192,7 @@ i18next.init({
 					filteredData, f, dataPoint, id, shortId, label;
 
 				settings.data = mergeData(data, sgcs);
-				scatterChart(chart, settings);
+				scatterObj = scatterChart(chart, settings);
 
 				filteredData = baseFilter(data);
 				for (f = 0; f < filteredData.length; f++) {
@@ -248,8 +248,14 @@ $("#age65_dist_growth").on("mouseenter mouseleave", "circle.visible", function(e
 		x = circleX + 10;
 		y = circleY - 10;
 
-		if (bbox.width + x > settings.width - settings.margin.left - settings.margin.right) {
+		if (bbox.width + x > scatterObj.settings.innerWidth - scatterObj.settings.margin.left) {
 			x -= bbox.width + 20;
+		}
+
+		if (bbox.height + y > scatterObj.settings.innerHeight) {
+			y = scatterObj.settings.innerHeight + scatterObj.settings.margin.top - bbox.height;
+		} else if (y < 0) {
+			y = 0;
 		}
 
 		textGroup.attr("transform", "translate(" + x + ", " + y + ")");
