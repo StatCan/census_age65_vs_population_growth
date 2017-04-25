@@ -1,23 +1,20 @@
 .point {
-	opacity: 0;
+	opacity: 0.7;
 	transition: opacity 1s linear;
+}
+
+.point:not(.visible) {
+	opacity: 0;
+	pointer-events: none;
 }
 
 .point:hover{
 	fill:#f00;
 }
 
-.sgc_name {
-  font-weight: bold;
-}
-
 .point.selected {
 	stroke: #f00;
 	stroke-width: 2
-}
-
-.point.visible {
-	opacity: 0.7;
 }
 
 .pt {
@@ -30,6 +27,10 @@
 
 .cma {
 	fill:#e26436;
+}
+
+.sgc_name {
+  font-weight: bold;
 }
 
 @media screen and (min-width:0\0) and (min-resolution: +72dpi) {
