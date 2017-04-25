@@ -141,6 +141,7 @@ this.scatterChart = function(svg, settings) {
       if (xAxisObj.empty()) {
         xAxisObj = chartInner.append('g')
         .attr('class', 'x axis')
+        .attr("aria-hidden", "true")
         .attr("transform", "translate(0," + innerHeight + ")")
       }
       xAxisObj.call(xAxis)
@@ -155,6 +156,7 @@ this.scatterChart = function(svg, settings) {
       if (yAxisObj.empty()) {
         yAxisObj = chartInner.append('g')
           .attr('class', 'y axis')
+          .attr("aria-hidden", "true");
       }
       yAxisObj.call(yAxis)
         .append("text")
