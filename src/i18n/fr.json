@@ -5,7 +5,7 @@
 			"x_label": "Variation en pourcentage de population (2011 à 2016)",
 			"y_label": "Population âgée de 65 ans et plus (%)",
 			"z_label": "Géographie",
-			"datatableTitle": "Données du graphique"
+			"datatableTitle": "Tableau de données du graphique"
 		}
 	}
 }

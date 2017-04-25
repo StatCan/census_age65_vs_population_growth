@@ -5,7 +5,7 @@
 			"x_label": "Percentage change in the population (2011 to 2016)",
 			"y_label": "Population aged 65 years and over (%)",
 			"z_label": "Geography",
-			"datatableTitle": "Chart Data"
+			"datatableTitle": "Chart Data Table"
 		}
 	}
 }
