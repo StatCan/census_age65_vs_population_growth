@@ -176,6 +176,7 @@ this.scatterChart = function(svg, settings) {
           .enter()
           .append("text")
             .text(sett.z.getText)
+            .attr("aria-hidden", "true")
             .attr("class", labelClassFn)
             .attr("fill", "#000")
             .attr("x", xLabelFn)
