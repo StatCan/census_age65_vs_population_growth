@@ -285,7 +285,7 @@ i18next.init({
 	})([sgcI18nRoot, rootI18nRoot]);
 });
 
-$(document).on("input", function(event) {
+$(document).on("input change", function(event) {
 	if (event.target.type === "text") {
 		clearTimeout(uiTimeout);
 		uiTimeout = setTimeout(function() {
@@ -295,10 +295,3 @@ $(document).on("input", function(event) {
 		uiHandler(event);
 	}
 });
-
-// IE Fix for checkbox
-if (!!window.MSInputMethodContext && !!document.documentMode) {
-	$("#groups, #labels").on("change", function(event) {
-		$(event.target).trigger("input");
-	});
-}
