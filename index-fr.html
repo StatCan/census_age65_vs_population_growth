@@ -123,24 +123,28 @@
 			<p>Ce graphique présente le pourcentage de la population âgée de 65 ans et plus et la variation de population (2011 à 2016) pour le Canada, les provinces et territoires, les régions métropolitaines de recensement (RMR), les agglomérations de recensement (AR) et les subdivisions de recensement (SDR).</p>
 			<p>Différentes vues graphiques sont disponibles dans lesquelles vous pouvez ajouter une subdivision de recensement.</p>
 			<form class="form-inline" onsubmit="return false;">
-				<label for="groups">Groupes</label>
-				<select id="groups" class="form-control">
-					<option value="pt">Canada, provinces et territoires</option>
-					<option value="cma">RMR</option>
-					<option value="atl">RMR/AR – Région de l’Atlantique</option>
-					<option value="QC">RMR/AR - Québec</option>
-					<option value="ON">RMR/AR - Ontario</option>
-					<option value="pra">RMR/AR - Prairies</option>
-					<option value="BC">RMR/AR - Colombie-Britannique</option>
-					<option value="terr">RMR/AR - Territoires</option>
-				</select>
-				<div class="pull-right">
-					<label for="sgc_select">Trouvez / ajoutez une géographie </label>
-					<input list="sgc_list" id="sgc_select" class="form-control" size="50" aria-label="Choisissez parmi les géographies appariées qui apparaissent ci-dessous à mesure que vous tapez."/>
-					<datalist id="sgc_list"></datalist>
-				</div>
-				<div class="text-right">
-					<input type="checkbox" id="labels" /><label for="labels"> Afficher les étiquettes</label>
+				<div class="row">
+					<div class="col-md-4">
+						<label for="groups">Groupes</label>
+						<select id="groups" class="form-control">
+							<option value="pt">Canada, provinces et territoires</option>
+							<option value="cma">RMR</option>
+							<option value="atl">RMR/AR – Région de l’Atlantique</option>
+							<option value="QC">RMR/AR - Québec</option>
+							<option value="ON">RMR/AR - Ontario</option>
+							<option value="pra">RMR/AR - Prairies</option>
+							<option value="BC">RMR/AR - Colombie-Britannique</option>
+							<option value="terr">RMR/AR - Territoires</option>
+						</select>
+					</div>
+					<div class="col-md-8">
+						<label for="sgc_select">Trouvez / ajoutez une géographie </label>
+						<input list="sgc_list" id="sgc_select" class="form-control" size="50" aria-label="Choisissez parmi les géographies appariées qui apparaissent ci-dessous à mesure que vous tapez."/>
+						<datalist id="sgc_list"></datalist>
+					</div>
+					<div class="col-md-12">
+						<input type="checkbox" id="labels" /><label for="labels"> Afficher les étiquettes</label>
+					</div>
 				</div>
 			</form>
 			<div class="data col-md-12"></div>

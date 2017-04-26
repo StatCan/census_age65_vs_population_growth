@@ -108,24 +108,28 @@ wet-boew.github.io2/wet-boew/License-en.html / wet-boew.github.io2/wet-boew/Lice
 			<p>This graph shows the percentage of the population aged 65 years and over and the population change (2011 to 2016) for Canada, provinces and territories, census metropolitan areas (CMAs), census agglomerations (CAs) and census subdivisions (CSDs).</p>
 			<p>Different graph views are available in which you can add a census subdivision.</p>
 			<form class="form-inline" onsubmit="return false;">
-				<label for="groups">Groups</label>
-				<select id="groups" class="form-control">
-					<option value="pt">Canada, provinces and territories</option>
-					<option value="cma">CMAs</option>
-					<option value="atl">CMAs/CAs - Atlantic Region</option>
-					<option value="QC">CMAs/CAs - Quebec</option>
-					<option value="ON">CMAs/CAs - Ontario</option>
-					<option value="pra">CMAs/CAs - Prairies</option>
-					<option value="BC">CMAs/CAs - British Colombia</option>
-					<option value="terr">CMAs/CAs - Territories</option>
-				</select>
-				<div class="pull-right">
-					<label for="sgc_select">Find / add a geography:</label>
-					<input list="sgc_list" id="sgc_select" class="form-control" size="50" aria-label="Select from the matching geographies that appear below as you type."/>
-					<datalist id="sgc_list"></datalist>
-				</div>
-				<div class="text-right">
-					<input type="checkbox" id="labels" /><label for="labels"> Show Labels</label>
+				<div class="row">
+					<div class="col-md-4">
+						<label for="groups">Groups</label>
+						<select id="groups" class="form-control">
+							<option value="pt">Canada, provinces and territories</option>
+							<option value="cma">CMAs</option>
+							<option value="atl">CMAs/CAs - Atlantic Region</option>
+							<option value="QC">CMAs/CAs - Quebec</option>
+							<option value="ON">CMAs/CAs - Ontario</option>
+							<option value="pra">CMAs/CAs - Prairies</option>
+							<option value="BC">CMAs/CAs - British Colombia</option>
+							<option value="terr">CMAs/CAs - Territories</option>
+						</select>
+					</div>
+					<div class="col-md-8">
+						<label for="sgc_select">Find / add a geography:</label>
+						<input list="sgc_list" id="sgc_select" class="form-control" size="50" aria-label="Select from the matching geographies that appear below as you type."/>
+						<datalist id="sgc_list"></datalist>
+					</div>
+					<div class="col-md-12">
+						<input type="checkbox" id="labels" /><label for="labels"> Show Labels</label>
+					</div>
 				</div>
 			</form>
 			<div class="data col-md-12"></div>
