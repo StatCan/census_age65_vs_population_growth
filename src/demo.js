@@ -117,11 +117,21 @@ var lang = document.documentElement.lang,
 				});
 			};
 		},
+		toggleHover = function() {
+			var $chart = $(chart.node());
+
+			if (!settings.showLabels) {
+				$chart.on(hoverEvents, hoverSelector, hoverHandler);
+			} else {
+				$chart.off(hoverEvents, hoverSelector);
+			}
+		},
 		uiHandler = function(event) {
 			var $sgc, id, idShort, list;
 
 			if (event.target.id === "labels") {
 				settings.showLabels = event.target.checked;
+				toggleHover();
 			} else {
 				switch(document.getElementById("groups").value) {
 				case "pt":
@@ -162,7 +172,60 @@ var lang = document.documentElement.lang,
 
 			scatterChart(chart, settings);
 
-		}, uiTimeout, scatterObj, selected;
+		},
+		hoverEvents = "mouseenter mouseleave",
+		hoverSelector = "circle.visible",
+		hoverHandler = function(e) {
+			var circle, text, textGroup, bbox, circleX, circleY, x, y;
+			switch(e.type) {
+			case "mouseenter":
+				circle = e.target;
+
+				textGroup = chart.select("#data").append("g")
+					.attr("class", "mouseover");
+
+				text = textGroup.append("text")
+
+				text.append("tspan")
+					.attr("class", "sgc_name")
+					.text(settings.z.getText(circle.__data__));
+
+				text.append("tspan")
+					.attr("x", 0)
+					.attr("dy", "1.5em")
+					.text(settings.x.label + ": " + settings.x.getValue(circle.__data__));
+
+				text.append("tspan")
+					.attr("x", 0)
+					.attr("dy", "1.5em")
+					.text(settings.y.label + ": " + settings.y.getValue(circle.__data__));
+
+
+				// Position hover box
+				bbox = textGroup.node().getBBox();
+				circleX = circle.cx.baseVal.value;
+				circleY = circle.cy.baseVal.value;
+
+				x = circleX + 10;
+				y = circleY - 10;
+
+				if (bbox.width + x > scatterObj.settings.innerWidth - scatterObj.settings.margin.left) {
+					x -= bbox.width + 20;
+				}
+
+				if (bbox.height + y > scatterObj.settings.innerHeight) {
+					y = scatterObj.settings.innerHeight + scatterObj.settings.margin.top - bbox.height;
+				} else if (y < 0) {
+					y = 0;
+				}
+
+				textGroup.attr("transform", "translate(" + x + ", " + y + ")");
+				break;
+			case "mouseleave":
+				d3.selectAll(".mouseover").remove();
+			}
+		},
+		uiTimeout, scatterObj, selected;
 
 i18next.init({
 	lng: lang
@@ -202,6 +265,8 @@ i18next.init({
 				settings.data = mergeData(data, sgcs);
 				scatterObj = scatterChart(chart, settings);
 
+				toggleHover();
+
 				filteredData = baseFilter(data);
 				for (f = 0; f < filteredData.length; f++) {
 					dataPoint = filteredData[f];
@@ -224,56 +289,3 @@ $(document).on("input", function(event) {
 		uiHandler(event);
 	}
 });
-
-if (!settings.showLabels) {
-	$("#age65_dist_growth").on("mouseenter mouseleave", "circle.visible", function(e) {
-		var circle, text, textGroup, bbox, circleX, circleY, x, y;
-		switch(e.type) {
-		case "mouseenter":
-			circle = e.target;
-
-			textGroup = chart.select("#data").append("g")
-				.attr("class", "mouseover");
-
-			text = textGroup.append("text")
-
-			text.append("tspan")
-				.attr("class", "sgc_name")
-				.text(settings.z.getText(circle.__data__));
-
-			text.append("tspan")
-				.attr("x", 0)
-				.attr("dy", "1.5em")
-				.text(settings.x.label + ": " + settings.x.getValue(circle.__data__));
-
-			text.append("tspan")
-				.attr("x", 0)
-				.attr("dy", "1.5em")
-				.text(settings.y.label + ": " + settings.y.getValue(circle.__data__));
-
-
-			// Position hover box
-			bbox = textGroup.node().getBBox();
-			circleX = circle.cx.baseVal.value;
-			circleY = circle.cy.baseVal.value;
-
-			x = circleX + 10;
-			y = circleY - 10;
-
-			if (bbox.width + x > scatterObj.settings.innerWidth - scatterObj.settings.margin.left) {
-				x -= bbox.width + 20;
-			}
-
-			if (bbox.height + y > scatterObj.settings.innerHeight) {
-				y = scatterObj.settings.innerHeight + scatterObj.settings.margin.top - bbox.height;
-			} else if (y < 0) {
-				y = 0;
-			}
-
-			textGroup.attr("transform", "translate(" + x + ", " + y + ")");
-			break;
-		case "mouseleave":
-			d3.selectAll(".mouseover").remove();
-		}
-	});
-}
