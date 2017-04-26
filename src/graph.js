@@ -98,6 +98,26 @@ this.scatterChart = function(svg, settings) {
         },
         xFn = function(d) {return x(sett.x.getValue(d))},
         yFn = function(d) {return y(sett.y.getValue(d))},
+        xLabelFn = function(d, i, selection) {
+          var bbox = selection[i].getBBox(),
+            lblX = xFn(d) + sett.pointRadius;
+
+          if (lblX + bbox.width > innerWidth) {
+            lblX -= bbox.width + sett.pointRadius * 2;
+          }
+
+          return lblX;
+        },
+        yLabelFn = function(d, i, selection) {
+          var bbox = selection[i].getBBox(),
+            lblY = yFn(d) - sett.pointRadius;
+
+          if (lblY < 0) {
+            lblY =+ sett.pointRadius * 2;
+          }
+
+          return lblY;
+        },
         xDomain, yDomain, bounds;
 
       if (sett.filterOutliars) {
@@ -155,19 +175,17 @@ this.scatterChart = function(svg, settings) {
           .data(data)
           .enter()
           .append("text")
+            .text(sett.z.getText)
             .attr("class", labelClassFn)
             .attr("fill", "#000")
-            .attr("x", xFn)
-            .attr("y", yFn)
-            .attr("dx", "0.5em")
-            .attr("dy", "-0.3em")
-            .text(sett.z.getText);
+            .attr("x", xLabelFn)
+            .attr("y", yLabelFn);
 
         scatterLabels
           .transition(transition)
           .attr("class", labelClassFn)
-          .attr("x", xFn)
-          .attr("y", yFn);
+          .attr("x", xLabelFn)
+          .attr("y", yLabelFn);
 
         scatterLabels
           .exit()
