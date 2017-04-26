@@ -229,61 +229,61 @@ var lang = document.documentElement.lang,
 
 i18next.init({
 	lng: lang
-});
-
-//Load the i18n
-(function(roots) {
-	var i18nCallback = function(data) {
-			var namespaces = Object.keys(data[lang]),
-				n, ns;
-			for (n = 0; n < namespaces.length; n++) {
-				ns = namespaces[n];
-				i18next.addResourceBundle(lang, ns, data[lang][ns]);
-			}
-		}, promises = [],
-		r;
-	for(r = 0; r < roots.length; r++) {
-		promises.push($.getJSON(roots[r] + lang + ".json"));
-	}
-
-	$.when.apply(this, promises).done(function() {
-		var i;
-
-		for(var i =0; i < arguments.length; i++) {
-			i18nCallback(arguments[i][0]);
+}).on('initialized', function(options) {
+	//Load the i18n
+	(function(roots) {
+		var i18nCallback = function(data) {
+				var namespaces = Object.keys(data[lang]),
+					n, ns;
+				for (n = 0; n < namespaces.length; n++) {
+					ns = namespaces[n];
+					i18next.addResourceBundle(lang, ns, data[lang][ns]);
+				}
+			}, promises = [],
+			r;
+		for(r = 0; r < roots.length; r++) {
+			promises.push($.getJSON(roots[r] + lang + ".json"));
 		}
 
-		settings.x.label = i18next.t("x_label", {ns: "age65_popgrowth"});
-		settings.y.label = i18next.t("y_label", {ns: "age65_popgrowth"});
-		settings.z.label = i18next.t("z_label", {ns: "age65_popgrowth"});
-		settings.altText = i18next.t("alt", {ns: "age65_popgrowth"});
-		settings.datatableTitle = i18next.t("datatableTitle", {ns: "age65_popgrowth"});
+		$.when.apply(this, promises).done(function() {
+			var i;
 
-		settings.displayOnly = getDisplayPointFn(provincesSGC);
+			for(var i =0; i < arguments.length; i++) {
+				i18nCallback(arguments[i][0]);
+			}
 
-		d3.queue()
-			.defer(d3.json, dataUrl)
-			.defer(d3.json, sgcUrl)
-				.await(function(error, data, sgcs) {
-				var $list = $("#sgc_list"),
-					filteredData, f, dataPoint, id, shortId, label;
+			settings.x.label = i18next.t("x_label", {ns: "age65_popgrowth"});
+			settings.y.label = i18next.t("y_label", {ns: "age65_popgrowth"});
+			settings.z.label = i18next.t("z_label", {ns: "age65_popgrowth"});
+			settings.altText = i18next.t("alt", {ns: "age65_popgrowth"});
+			settings.datatableTitle = i18next.t("datatableTitle", {ns: "age65_popgrowth"});
 
-				settings.data = mergeData(data, sgcs);
-				scatterObj = scatterChart(chart, settings);
+			settings.displayOnly = getDisplayPointFn(provincesSGC);
 
-				toggleHover();
+			d3.queue()
+				.defer(d3.json, dataUrl)
+				.defer(d3.json, sgcUrl)
+					.await(function(error, data, sgcs) {
+					var $list = $("#sgc_list"),
+						filteredData, f, dataPoint, id, shortId, label;
 
-				filteredData = baseFilter(data);
-				for (f = 0; f < filteredData.length; f++) {
-					dataPoint = filteredData[f];
-					id = settings.z.getId(dataPoint);
-					sgcId = settings.z.getSGCId(dataPoint);
-					text = settings.z.getText(dataPoint);
-					$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
-				}
-			});
-	});
-})([sgcI18nRoot, rootI18nRoot])
+					settings.data = mergeData(data, sgcs);
+					scatterObj = scatterChart(chart, settings);
+
+					toggleHover();
+
+					filteredData = baseFilter(data);
+					for (f = 0; f < filteredData.length; f++) {
+						dataPoint = filteredData[f];
+						id = settings.z.getId(dataPoint);
+						sgcId = settings.z.getSGCId(dataPoint);
+						text = settings.z.getText(dataPoint);
+						$list.append("<option value=\"" + text + "\" data-id=\"" + id + "\">" + text + "</option>");
+					}
+				});
+		});
+	})([sgcI18nRoot, rootI18nRoot]);
+});
 
 $(document).on("input", function(event) {
 	if (event.target.type === "text") {
