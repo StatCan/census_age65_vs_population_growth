@@ -295,3 +295,10 @@ $(document).on("input", function(event) {
 		uiHandler(event);
 	}
 });
+
+// IE Fix for checkbox
+if (!!window.MSInputMethodContext && !!document.documentMode) {
+	$("#groups, #labels").on("change", function(event) {
+		$(event.target).trigger("input");
+	});
+}
