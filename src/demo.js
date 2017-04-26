@@ -84,7 +84,7 @@ var lang = document.documentElement.lang,
 
 				return _this;
 			}(),
-			showLabels: true,
+			showLabels: false,
 			width: 900
 		},
 		mergeData = function(data, sgcs) {
@@ -117,44 +117,49 @@ var lang = document.documentElement.lang,
 				});
 			};
 		},
-		uiHandler = function() {
+		uiHandler = function(event) {
 			var $sgc, id, idShort, list;
 
-			switch(document.getElementById("groups").value) {
-			case "pt":
-				list = provincesSGC
-				break;
-			case "cma":
-				list = CMAs
-				break;
-			default:
-				list = CA[document.getElementById("groups").value]
-			}
+			if (event.target.id === "labels") {
+				settings.showLabels = event.target.checked;
+			} else {
+				switch(document.getElementById("groups").value) {
+				case "pt":
+					list = provincesSGC
+					break;
+				case "cma":
+					list = CMAs
+					break;
+				default:
+					list = CA[document.getElementById("groups").value]
+				}
 
-			if (document.getElementById("sgc_select").value) {
-				$sgc = $("option[value='" + document.getElementById("sgc_select").value + "']");
-				if ($sgc.length !== 0) {
-					id = $sgc.attr("data-id");
+				if (document.getElementById("sgc_select").value) {
+					$sgc = $("option[value='" + document.getElementById("sgc_select").value + "']");
+					if ($sgc.length !== 0) {
+						id = $sgc.attr("data-id");
 
-					idShort = id.substr(idPrefix.length);
-					list = list.concat(idShort);
+						idShort = id.substr(idPrefix.length);
+						list = list.concat(idShort);
 
-					settings.filterData = function(data) {
-						var newData = defaultFilter(data, "chart"),
-							point = baseFilter(data)[data.index.indexOf(idShort)];
+						settings.filterData = function(data) {
+							var newData = defaultFilter(data, "chart"),
+								point = baseFilter(data)[data.index.indexOf(idShort)];
 
-						selected = point;
+							selected = point;
 
-						if (newData.indexOf(point) === -1) {
-							newData.push(point);
+							if (newData.indexOf(point) === -1) {
+								newData.push(point);
+							}
+
+							return newData;
 						}
-
-						return newData;
 					}
 				}
+
+				settings.displayOnly = getDisplayPointFn(list);
 			}
 
-			settings.displayOnly = getDisplayPointFn(list);
 			scatterChart(chart, settings);
 
 		}, uiTimeout, scatterObj, selected;

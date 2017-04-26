@@ -149,11 +149,10 @@ this.scatterChart = function(svg, settings) {
           .remove();
 
 
+      scatterLabels = dataLayer.selectAll(".label");
       if (sett.showLabels) {
-        scatterLabel = dataLayer.selectAll(".label")
+        scatterLabels
           .data(data)
-
-        scatterLabel
           .enter()
           .append("text")
             .attr("class", labelClassFn)
@@ -164,15 +163,18 @@ this.scatterChart = function(svg, settings) {
             .attr("dy", "-0.3em")
             .text(sett.z.getText);
 
-        scatterLabel
+        scatterLabels
           .transition(transition)
           .attr("class", labelClassFn)
           .attr("x", xFn)
           .attr("y", yFn);
 
-        scatterLabel
+        scatterLabels
           .exit()
             .remove();
+      } else {
+        scatterLabels
+          .remove();
       }
 
       if (xAxisObj.empty()) {
