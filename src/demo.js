@@ -243,10 +243,16 @@ i18next.init({
 		}, promises = [],
 		r;
 	for(r = 0; r < roots.length; r++) {
-		promises.push($.getJSON(roots[r] + lang + ".json", i18nCallback));
+		promises.push($.getJSON(roots[r] + lang + ".json"));
 	}
 
 	$.when.apply(this, promises).done(function() {
+		var i;
+
+		for(var i =0; i < arguments.length; i++) {
+			i18nCallback(arguments[i][0]);
+		}
+
 		settings.x.label = i18next.t("x_label", {ns: "age65_popgrowth"});
 		settings.y.label = i18next.t("y_label", {ns: "age65_popgrowth"});
 		settings.z.label = i18next.t("z_label", {ns: "age65_popgrowth"});
