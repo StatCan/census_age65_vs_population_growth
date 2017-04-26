@@ -50,16 +50,21 @@ var lang = document.documentElement.lang,
 			z: function() {
 				var _this = {
 					getClass: function(d) {
-						var id = _this.getSGCId(d);
+						var cl = "",
+							id = _this.getSGCId(d);
 						if (provincesSGC.indexOf(id) !== -1) {
-							return "pt";
+							cl += "pt";
 						} else if (CMAs.indexOf(id) !== -1) {
-							return "cma";
+							cl += "cma";
 						} else if (CAs.indexOf(id) !== -1) {
-							return "ca";
+							cl += "ca";
 						}
 
-						return "";
+						if (selected === d) {
+							cl += " selected";
+						}
+
+						return cl;
 					},
 					getId: function(d){
 						return idPrefix + d.sgcId;
@@ -133,14 +138,11 @@ var lang = document.documentElement.lang,
 					idShort = id.substr(idPrefix.length);
 					list = list.concat(idShort);
 
-					setTimeout(function() {
-						chart.select("#" + id)
-							.classed("selected", true);
-					}, 500);
-
 					settings.filterData = function(data) {
 						var newData = defaultFilter(data, "chart"),
 							point = baseFilter(data)[data.index.indexOf(idShort)];
+
+						selected = point;
 
 						if (newData.indexOf(point) === -1) {
 							newData.push(point);
@@ -154,7 +156,7 @@ var lang = document.documentElement.lang,
 			settings.displayOnly = getDisplayPointFn(list);
 			scatterChart(chart, settings);
 
-		}, uiTimeout, scatterObj;
+		}, uiTimeout, scatterObj, selected;
 
 i18next.init({
 	lng: lang
@@ -206,12 +208,15 @@ i18next.init({
 	});
 })([sgcI18nRoot, rootI18nRoot])
 
-$(document).on("change", uiHandler);
-$(document).on("input", function() {
-	clearTimeout(uiTimeout);
-	uiTimeout = setTimeout(function() {
-		uiHandler();
-	}, 500)
+$(document).on("input", function(event) {
+	if (event.target.type === "text") {
+		clearTimeout(uiTimeout);
+		uiTimeout = setTimeout(function() {
+			uiHandler(event);
+		}, 500);
+	} else {
+		uiHandler(event);
+	}
 });
 
 $("#age65_dist_growth").on("mouseenter mouseleave", "circle.visible", function(e) {
