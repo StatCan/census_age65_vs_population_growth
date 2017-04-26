@@ -145,7 +145,7 @@ var lang = document.documentElement.lang,
 				}
 
 				if (document.getElementById("sgc_select").value) {
-					$sgc = $("option[value='" + document.getElementById("sgc_select").value + "']");
+					$sgc = $("option[value='" + document.getElementById("sgc_select").value.replace("'", "\\'") + "']");
 					if ($sgc.length !== 0) {
 						id = $sgc.attr("data-id");
 
