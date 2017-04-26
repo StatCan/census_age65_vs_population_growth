@@ -71,7 +71,7 @@ var lang = document.documentElement.lang,
 						var sgcId = _this.getSGCId(d),
 							text = i18next.t(_this.getId(d), {ns: "sgc"});
 						if (sgcId.length > 2) {
-							text  += ", " + i18next.t(d.type, {ns: "sgc_type"}) + ", " + sgc.getProvinceCodeFromSGC(sgc.getSGCProvince(sgcId));
+							text  += ", " + i18next.t(d.type, {ns: "sgc_type"}) + ", " + i18next.t(idPrefix + sgc.getSGCProvince(sgcId), {ns: "sgc", context: "abbr"});
 						}
 						return text;
 					}
