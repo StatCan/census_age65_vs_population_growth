@@ -40,11 +40,33 @@ var lang = document.documentElement.lang,
     x: {
       getValue: function(d) {
         return d.pop_growth;
+      },
+      getText: function(d) {
+        var parsing_string = String(d.pop_growth)
+        if(parsing_string.indexOf(".") < 0){
+          parsing_string += '.0'
+        }
+        if(lang === 'fr'){
+          return parsing_string.replace('.',',');
+        } else {
+          return parsing_string;
+        }
       }
     },
     y: {
       getValue: function(d) {
         return d.pc_over_65;
+      },
+      getText: function(d) {
+        var parsing_string = String(d.pc_over_65)
+        if(parsing_string.indexOf(".") < 0){
+          parsing_string += '.0'
+        }
+        if(lang === 'fr'){
+          return parsing_string.replace('.',',');
+        } else {
+          return parsing_string;
+        }
       }
     },
     z: function() {
@@ -164,6 +186,7 @@ var lang = document.documentElement.lang,
 
             return newData;
           };
+
         }
       }
 

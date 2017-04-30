@@ -270,11 +270,11 @@ this.scatterChart = function(svg, settings) {
 
         dataRow
           .append("td")
-            .text(settings.x.getValue);
+            .text(settings.x.getText);
 
         dataRow
           .append("td")
-            .text(settings.y.getValue);
+            .text(settings.y.getText);
 
         if ($) {
           $(".chart-data-table summary").trigger("wb-init.wb-details");
