@@ -46,22 +46,30 @@ var lang = document.documentElement.lang,
       bottom: 30,
       left: 27
     },
-    x: {
-      getValue: function(d) {
-        return d.pop_growth;
-      },
-      getText: function(d) {
-        return numberFormatter.format(d.pop_growth);
-      }
-    },
-    y: {
-      getValue: function(d) {
-        return d.pc_over_65;
-      },
-      getText: function(d) {
-        return numberFormatter.format(d.pc_over_65);
-      }
-    },
+    x: function() {
+      var _this = {
+        getValue: function(d) {
+          return d.pop_growth;
+        },
+        getText: function(d) {
+          return numberFormatter.format(_this.getValue(d));
+        }
+      };
+
+      return _this;
+    }(),
+    y: function() {
+      var _this = {
+        getValue: function(d) {
+          return d.pc_over_65;
+        },
+        getText: function(d) {
+          return numberFormatter.format(_this.getValue(d));
+        }
+      };
+
+      return _this;
+    }(),
     z: function() {
       var _this = {
         getClass: function(d) {
