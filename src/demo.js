@@ -29,6 +29,7 @@ var lang = document.documentElement.lang,
     }
     return newData;
   },
+  numberFormatter = new Intl.NumberFormat(lang, {minimumFractionDigits: 1 }),
   settings = {
     filterData: defaultFilter,
     margin: {
@@ -42,15 +43,7 @@ var lang = document.documentElement.lang,
         return d.pop_growth;
       },
       getText: function(d) {
-        var parsing_string = String(d.pop_growth)
-        if(parsing_string.indexOf(".") < 0){
-          parsing_string += '.0'
-        }
-        if(lang === 'fr'){
-          return parsing_string.replace('.',',');
-        } else {
-          return parsing_string;
-        }
+        return numberFormatter.format(d.pop_growth);
       }
     },
     y: {
@@ -58,15 +51,7 @@ var lang = document.documentElement.lang,
         return d.pc_over_65;
       },
       getText: function(d) {
-        var parsing_string = String(d.pc_over_65)
-        if(parsing_string.indexOf(".") < 0){
-          parsing_string += '.0'
-        }
-        if(lang === 'fr'){
-          return parsing_string.replace('.',',');
-        } else {
-          return parsing_string;
-        }
+        return numberFormatter.format(d.pc_over_65);
       }
     },
     z: function() {
