@@ -29,7 +29,15 @@ var lang = document.documentElement.lang,
     }
     return newData;
   },
-  numberFormatter = new Intl.NumberFormat(lang, {minimumFractionDigits: 1 }),
+  numberFormatter = (function() {
+  try {
+    return new Intl.NumberFormat(lang, {minimumFractionDigits: 1 });
+  } catch (e) {
+    return {
+      format: function(d){return d;}
+    };
+  }
+  })(),
   settings = {
     filterData: defaultFilter,
     margin: {
