@@ -1,22 +1,22 @@
 (function() {
 var scatterDefault = {
-    margin: {
-      top: 10,
-      right: 10,
-      bottom: 30,
-      left: 50
-    },
-    aspectRatio: 16 / 9,
-    x: {
-      ticks: 5
-    },
-    y: {
-      ticks: 10
-    },
-    showLabels: false,
-    pointRadius: 5,
-    width: 600,
-  };
+  margin: {
+    top: 10,
+    right: 10,
+    bottom: 30,
+    left: 50
+  },
+  aspectRatio: 16 / 9,
+  x: {
+    ticks: 5
+  },
+  y: {
+    ticks: 10
+  },
+  showLabels: false,
+  pointRadius: 5,
+  width: 600,
+};
 
 this.scatterChart = function(svg, settings) {
   var mergedSettings = $.extend({}, scatterDefault, settings),
@@ -28,7 +28,7 @@ this.scatterChart = function(svg, settings) {
     y = d3.scaleLinear().range([innerHeight, 0]),
     xAxis = d3.axisBottom(x).ticks(mergedSettings.x.ticks),
     yAxis = d3.axisLeft(y).ticks(mergedSettings.y.ticks),
-    chartInner = chart.select("g"),
+    chartInner = svg.select("g"),
     transition = d3.transition()
       .duration(1000)
       .ease(d3.easeLinear),
@@ -36,7 +36,7 @@ this.scatterChart = function(svg, settings) {
       var numericalSort = function (a, b) {
           return a - b;
         },
-        xArray, yArray, p5, xMin, xMax, yMin, yMax;
+        xArray, yArray, p5;
 
       xArray = data.map(function(d) {
         return mergedSettings.x.getValue(d);
@@ -73,11 +73,11 @@ this.scatterChart = function(svg, settings) {
           var cl = "point point" + (i + 1);
 
           if (sett.z && sett.z.getClass && typeof sett.z.getClass === "function") {
-            cl += " " + sett.z.getClass(d)
+            cl += " " + sett.z.getClass(d);
           }
 
           if (!displayOnly || displayOnly.indexOf(d) !== -1) {
-            cl += " visible"
+            cl += " visible";
           }
 
           return cl;
@@ -86,18 +86,18 @@ this.scatterChart = function(svg, settings) {
           var cl = "label label" + (i + 1);
 
           if (!displayOnly || displayOnly.indexOf(d) !== -1) {
-            cl += " visible"
+            cl += " visible";
           }
 
           return cl;
         },
         idFn = function(d) {
-            if (sett.z && sett.z.getId && typeof sett.z.getId === "function") {
-                return sett.z.getId(d)
-            }
+          if (sett.z && sett.z.getId && typeof sett.z.getId === "function") {
+            return sett.z.getId(d);
+          }
         },
-        xFn = function(d) {return x(sett.x.getValue(d))},
-        yFn = function(d) {return y(sett.y.getValue(d))},
+        xFn = function(d) {return x(sett.x.getValue(d));},
+        yFn = function(d) {return y(sett.y.getValue(d));},
         xLabelFn = function(d, i, selection) {
           var bbox = selection[i].getBBox(),
             lblX = xFn(d) + sett.pointRadius;
@@ -108,9 +108,8 @@ this.scatterChart = function(svg, settings) {
 
           return lblX;
         },
-        yLabelFn = function(d, i, selection) {
-          var bbox = selection[i].getBBox(),
-            lblY = yFn(d) - sett.pointRadius;
+        yLabelFn = function(d) {
+          var lblY = yFn(d) - sett.pointRadius;
 
           if (lblY < 0) {
             lblY =+ sett.pointRadius * 2;
@@ -118,13 +117,13 @@ this.scatterChart = function(svg, settings) {
 
           return lblY;
         },
-        xDomain, yDomain, bounds;
+        xDomain, yDomain, bounds, scatter, scatterLabels;
 
       if (sett.filterOutliars) {
-         bounds = getOutliarBounds(data);
+        bounds = getOutliarBounds(data);
 
-         xDomain = [bounds.x.min, bounds.x.max];
-         yDomain = [bounds.y.min, bounds.y.max];
+        xDomain = [bounds.x.min, bounds.x.max];
+        yDomain = [bounds.y.min, bounds.y.max];
       } else if (displayOnly) {
         xDomain = d3.extent(displayOnly, sett.x.getValue);
         yDomain = d3.extent(displayOnly, sett.y.getValue);
@@ -147,7 +146,7 @@ this.scatterChart = function(svg, settings) {
       }
 
       scatter = dataLayer.selectAll(".point")
-        .data(data)
+        .data(data);
 
       scatter
         .enter()
@@ -197,10 +196,10 @@ this.scatterChart = function(svg, settings) {
       }
 
       if (xAxisObj.empty()) {
-        xAxisObj = chartInner.append('g')
-        .attr('class', 'x axis')
+        xAxisObj = chartInner.append("g")
+        .attr("class", "x axis")
         .attr("aria-hidden", "true")
-        .attr("transform", "translate(0," + innerHeight + ")")
+        .attr("transform", "translate(0," + innerHeight + ")");
       }
       xAxisObj.call(xAxis)
         .append("text")
@@ -212,8 +211,8 @@ this.scatterChart = function(svg, settings) {
           .text(settings.x.label);
 
       if (yAxisObj.empty()) {
-        yAxisObj = chartInner.append('g')
-          .attr('class', 'y axis')
+        yAxisObj = chartInner.append("g")
+          .attr("class", "y axis")
           .attr("aria-hidden", "true");
       }
       yAxisObj.call(yAxis)
@@ -230,7 +229,7 @@ this.scatterChart = function(svg, settings) {
       var sett = this.settings,
         data = (sett.filterData && typeof sett.filterData === "function") ?
           sett.filterData(sett.data, "table") : sett.data,
-        parent = chart.select(function(){return this.parentNode;}),
+        parent = svg.select(function(){return this.parentNode;}),
         details = parent
           .select("details"),
         table, header, body, dataRows, dataRow;
@@ -295,7 +294,7 @@ this.scatterChart = function(svg, settings) {
     .attr("aria-label", mergedSettings.altText);
 
   if (chartInner.empty()) {
-    chartInner = chart.append("g")
+    chartInner = svg.append("g")
       .attr("transform", "translate(" + mergedSettings.margin.left + "," + mergedSettings.margin.top + ")");
   }
 
