@@ -119,35 +119,51 @@
 </header>
 <main role="main" property="mainContentOfPage" class="container">
 		<div class="scatter">
-			<h1 property="name" id="wb-cont">Population âgée de 65 ans et plus (%) et la variation en pourcentage de population (2011 à 2016), Recensement de 2016</h1>
-			<p>Ce graphique présente le pourcentage de la population âgée de 65 ans et plus et la variation de population (2011 à 2016) pour le Canada, les provinces et territoires, les régions métropolitaines de recensement (RMR), les agglomérations de recensement (AR) et les subdivisions de recensement (SDR).</p>
-			<p>Différentes vues graphiques sont disponibles dans lesquelles vous pouvez ajouter une subdivision de recensement.</p>
-			<form class="form-inline" onsubmit="return false;">
+			<h1 property="name" id="wb-cont">Relation entre la croissance et le vieillissement de la population pour diverses régions du Canada</h1>
+			<p>Ce graphique interactif montre la relation entre le pourcentage de la population âgée de 65 ans et plus et la variation en pourcentage de population de 2011 à 2016. La visualisation des données est disponible pour divers niveaux géographiques y compris le Canada, les provinces et les territoires, les régions métropolitaines de recensement (RMR), et plusieurs regroupements de régions métropolitaines de recensement (RMR)/d'agglomérations de recensement (AR). Certaines subdivisions de recensement (SDR) peuvent aussi être ajoutées au diagramme aux fins de la comparaison.</p>
+			<p>Sélectionnez un « niveau géographique » pour modifier la vue graphique.</p>
+			<p>Sélectionnez ou tapez une géographie dans la boîte « Trouvez / ajoutez une géographie » pour mettre en évidence une géographie déjà affichée ou pour ajouter et mettre en évidence une géographie qui n'est pas déjà sur le graphique.</p>
+			<form onsubmit="return false;">
 				<div class="row">
-					<div class="col-md-4">
-						<label for="groups">Groupes</label>
-						<select id="groups" class="form-control">
-							<option value="pt">Canada, provinces et territoires</option>
-							<option value="cma">RMR</option>
-							<option value="atl">RMR/AR – Région de l’Atlantique</option>
-							<option value="QC">RMR/AR - Québec</option>
-							<option value="ON">RMR/AR - Ontario</option>
-							<option value="pra">RMR/AR - Prairies</option>
-							<option value="BC">RMR/AR - Colombie-Britannique</option>
-							<option value="terr">RMR/AR - Territoires</option>
-						</select>
+					<div class="col-md-5">
+						<div class="form-group">
+							<label for="groups">Niveau géographique :</label>
+							<select id="groups" class="form-control">
+								<option value="pt">Canada, provinces et territoires</option>
+								<option value="cma">RMR</option>
+								<option value="atl">RMR/AR – Atlantique</option>
+								<option value="QC">RMR/AR - Québec</option>
+								<option value="ON">RMR/AR - Ontario</option>
+								<option value="pra">RMR/AR - Prairies</option>
+								<option value="BC">RMR/AR - Colombie-Britannique</option>
+								<option value="terr">RMR/AR - Territoires</option>
+							</select>
+						</div>
 					</div>
-					<div class="col-md-8">
-						<label for="sgc_select">Trouvez / ajoutez une géographie </label>
-						<input list="sgc_list" id="sgc_select" class="form-control" size="50" aria-label="Choisissez parmi les géographies appariées qui apparaissent ci-dessous à mesure que vous tapez."/>
-						<datalist id="sgc_list"></datalist>
+					<div class="col-md-7">
+						<div class="form-group">
+							<label for="sgc_select">Trouvez / ajoutez une géographie (facultatif) :</label>
+							<input list="sgc_list" id="sgc_select" class="form-control" aria-label="Choisissez parmi les géographies appariées qui apparaissent ci-dessous à mesure que vous tapez."/>
+							<datalist id="sgc_list"></datalist>
+						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12 text-right">
 						<input type="checkbox" id="labels" /><label for="labels">&nbsp;Afficher les étiquettes</label>
 					</div>
 				</div>
 			</form>
-			<div class="data col-md-12"></div>
+			<div class="row">
+				<div class="data col-md-12"></div>
+			</div>
+			<div class="legend mrgn-tp-lg well well-sm" role="presentation">
+				<p class="h4 mrgn-tp-sm">Légende</p>
+				<ul class="list-unstyled colcount-sm-2">
+						<li><span class="lgndt pt"></span>&nbsp;&nbsp;Canada, province ou territoire</li>
+						<li><span class="lgndt cma"></span>&nbsp;&nbsp;Région métropolitaine de recensement (RMR)</li>
+						<li><span class="lgndt ca"></span>&nbsp;&nbsp;Agglomération de recensement (AR)</li>
+						<li><span class="lgndt selected"></span>&nbsp;&nbsp;Géographie trouvée ou ajoutée</li>
+				</ul>
+			</div>
 		</div>
 </main>
 	<aside class="gc-nttvs container">

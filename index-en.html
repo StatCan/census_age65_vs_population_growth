@@ -104,35 +104,51 @@ wet-boew.github.io2/wet-boew/License-en.html / wet-boew.github.io2/wet-boew/Lice
 	</header>
 	<main role="main" property="mainContentOfPage" class="container">
 		<div class="scatter">
-			<h1 property="name" id="wb-cont">Population aged 65 years and over (%) and percentage change in the population (2011 to 2016), 2016 Census</h1>
-			<p>This graph shows the percentage of the population aged 65 years and over and the population change (2011 to 2016) for Canada, provinces and territories, census metropolitan areas (CMAs), census agglomerations (CAs) and census subdivisions (CSDs).</p>
-			<p>Different graph views are available in which you can add a census subdivision.</p>
-			<form class="form-inline" onsubmit="return false;">
+			<h1 property="name" id="wb-cont">Relationship between population growth and aging for various regions in Canada</h1>
+			<p>This interactive chart shows the relationship between percentage of the population aged 65 years and older and the percentage change in the population (2011 to 2016). Data views are available for various geographic levels including Canada, provinces and territories, census metropolitan areas (CMAs) and several regional census metropolitan area (CMA)/census agglomeration (CA) groupings. Selected census subdivisions (CSDs) can also be added to the chart for comparison purposes.</p>
+			<p>Select a 'Geographic level' to change the chart view.</p>
+			<p>Select or type a geography in the 'Find / add a geography' box to highlight a geography that is already displayed on the chart or to add and highlight a geography that is not already displayed on the chart.</p>
+			<form onsubmit="return false;">
 				<div class="row">
-					<div class="col-md-4">
-						<label for="groups">Groups</label>
-						<select id="groups" class="form-control">
-							<option value="pt">Canada, provinces and territories</option>
-							<option value="cma">CMAs</option>
-							<option value="atl">CMAs/CAs - Atlantic Region</option>
-							<option value="QC">CMAs/CAs - Quebec</option>
-							<option value="ON">CMAs/CAs - Ontario</option>
-							<option value="pra">CMAs/CAs - Prairies</option>
-							<option value="BC">CMAs/CAs - British Colombia</option>
-							<option value="terr">CMAs/CAs - Territories</option>
-						</select>
+					<div class="col-md-5">
+						<div class="form-group">
+							<label for="groups">Geographic level:</label>
+							<select id="groups" class="form-control">
+								<option value="pt">Canada, provinces and territories</option>
+								<option value="cma">CMAs</option>
+								<option value="atl">CMAs/CAs - Atlantic</option>
+								<option value="QC">CMAs/CAs - Quebec</option>
+								<option value="ON">CMAs/CAs - Ontario</option>
+								<option value="pra">CMAs/CAs - Prairies</option>
+								<option value="BC">CMAs/CAs - British Colombia</option>
+								<option value="terr">CMAs/CAs - Territories</option>
+							</select>
+						</div>
 					</div>
-					<div class="col-md-8">
-						<label for="sgc_select">Find / add a geography:</label>
-						<input list="sgc_list" id="sgc_select" class="form-control" size="50" aria-label="Select from the matching geographies that appear below as you type."/>
-						<datalist id="sgc_list"></datalist>
+					<div class="col-md-7">
+						<div class="form-group">
+							<label for="sgc_select">Find / add a geography (optional):</label>
+							<input type="text" list="sgc_list" id="sgc_select" class="form-control" aria-label="Select from the matching geographies that appear below as you type."/>
+							<datalist id="sgc_list"></datalist>
+						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12 text-right">
 						<input type="checkbox" id="labels" /><label for="labels">&nbsp;Show Labels</label>
 					</div>
 				</div>
 			</form>
-			<div class="data col-md-12"></div>
+			<div class="row">
+				<div class="data col-md-12"></div>
+			</div>
+			<div class="legend mrgn-tp-lg well well-sm" role="presentation">
+        <p class="h4 mrgn-tp-sm">Legend</p>
+        <ul class="list-unstyled colcount-sm-2">
+            <li><span class="lgndt pt"></span>&nbsp;&nbsp;Canada, province or territory</li>
+            <li><span class="lgndt cma"></span>&nbsp;&nbsp;Census metropolitan area (CMA)</li>
+            <li><span class="lgndt ca"></span>&nbsp;&nbsp;Census agglomeration (CA)</li>
+            <li><span class="lgndt selected"></span>&nbsp;&nbsp;Found or added geography</li>
+        </ul>
+      </div>
 		</div>
 	</main>
 	<aside class="gc-nttvs container">
