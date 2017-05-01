@@ -183,6 +183,7 @@ this.scatterChart = function(svg, settings) {
 
         scatterLabels
           .transition(transition)
+          .text(sett.z.getText)
           .attr("class", labelClassFn)
           .attr("x", xLabelFn)
           .attr("y", yLabelFn);
