@@ -240,8 +240,8 @@ this.scatterChart = function(svg, settings) {
           .append("details")
             .attr("class", "chart-data-table");
 
-        // TODO: Add i18n
         details.append("summary")
+          .attr("id", "chrt-dt-tbl")
           .text(settings.datatableTitle);
 
         table = details
