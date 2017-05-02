@@ -51,6 +51,10 @@
 	opacity: .7;
 }
 
+.chart-data-table td {
+	text-align: right;
+}
+
 @media screen and (min-width:0\0) and (min-resolution: +72dpi) {
   /* IE9+ CSS */
   svg{
