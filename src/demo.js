@@ -217,12 +217,12 @@ var lang = document.documentElement.lang,
       text.append("tspan")
         .attr("x", 0)
         .attr("dy", "1.5em")
-        .text(settings.x.label + ": " + settings.x.getValue(circle.__data__));
+        .text(settings.x.label + ": " + settings.x.getText(circle.__data__));
 
       text.append("tspan")
         .attr("x", 0)
         .attr("dy", "1.5em")
-        .text(settings.y.label + ": " + settings.y.getValue(circle.__data__));
+        .text(settings.y.label + ": " + settings.y.getText(circle.__data__));
 
 
       // Position hover box
