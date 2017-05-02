@@ -224,6 +224,12 @@ var lang = document.documentElement.lang,
         .attr("dy", "1.5em")
         .text(settings.y.label + ": " + settings.y.getText(circle.__data__));
 
+      bbox = textGroup.node().getBBox();
+      textGroup.insert("rect", "text")
+        .attr("y", bbox.y)
+        .attr("width", bbox.width)
+        .attr("height", bbox.height);
+
 
       // Position hover box
       bbox = textGroup.node().getBBox();
