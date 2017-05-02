@@ -200,7 +200,8 @@ var lang = document.documentElement.lang,
   hoverEvents = "mouseenter mouseleave",
   hoverSelector = "circle.visible",
   hoverHandler = function(e) {
-    var circle, text, textGroup, bbox, circleX, circleY, x, y;
+    var seperator = i18next.t("sep", {ns: "age65_popgrowth"}),
+      circle, text, textGroup, bbox, circleX, circleY, x, y;
     switch(e.type) {
     case "mouseenter":
       circle = e.target;
@@ -217,12 +218,12 @@ var lang = document.documentElement.lang,
       text.append("tspan")
         .attr("x", 0)
         .attr("dy", "1.5em")
-        .text(settings.x.label + ": " + settings.x.getText(circle.__data__));
+        .text(settings.x.label + seperator + settings.x.getText(circle.__data__));
 
       text.append("tspan")
         .attr("x", 0)
         .attr("dy", "1.5em")
-        .text(settings.y.label + ": " + settings.y.getText(circle.__data__));
+        .text(settings.y.label + seperator + settings.y.getText(circle.__data__));
 
       bbox = textGroup.node().getBBox();
       textGroup.insert("rect", "text")
