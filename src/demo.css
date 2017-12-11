@@ -1,3 +1,12 @@
+.data svg text {
+	fill: currentColor;
+}
+
+.data svg .domain,
+.data svg .tick line {
+	stroke: currentColor;
+}
+
 .point, .label {
 	transition: opacity 1s linear;
 }
@@ -14,6 +23,10 @@
 .point.selected, .lgndt.selected {
 	fill:#f00;
 	background: #f00;
+}
+
+.point {
+	fill: currentColor;
 }
 
 .pt {
