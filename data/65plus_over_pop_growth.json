@@ -1,4 +1,11 @@
-{"distribution":[
+{
+	"meta": {
+		"license": {
+			"en": "http://www.statcan.gc.ca/eng/reference/licence",
+			"fr": "http://www.statcan.gc.ca/fra/reference/licence"
+		}
+	},
+	"distribution":[
 {"sgcId":"01","pop_growth":5,"pc_over_65":16.9},
 {"sgcId":"10","pop_growth":1,"pc_over_65":19.4},
 {"sgcId":"11","pop_growth":1.9,"pc_over_65":19.4},
